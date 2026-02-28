@@ -1,20 +1,12 @@
+import streamlit as st
+from recommender import recommend, df
 
-import cv2
+st.title(" Movie Recommender")
 
-cap = cv2.VideoCapture(0)
-if not cap.isOpened():
-  print('Failed to open the camera')
-  exit()
-while True:
-  ret , frame = cap.read()
-  if not ret:
-    print('Error : Couldnt extract the frame')
-    break
-  
-  cv2.imshow('Emotional Detector',frame)
+movie = st.selectbox("Pick a movie you like:", df['title'].values)
 
-  if cv2.waitKey(1) == ord('q'):
-    break
-
-cap.release()
-cv2.destroyAllWindows() 
+if st.button("Recommend"):
+    results = recommend(movie)
+    st.subheader("You might also like:")
+    for r in results:
+        st.write("🎥 " + r)
